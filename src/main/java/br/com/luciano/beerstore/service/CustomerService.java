@@ -24,6 +24,6 @@ public class CustomerService {
             throw new CustomerAlreadyExistException();
         }
 
-        return null;
+        return this.customerRepository.save(customer);
     }
 }
