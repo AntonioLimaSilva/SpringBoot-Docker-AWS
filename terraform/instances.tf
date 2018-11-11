@@ -12,11 +12,34 @@ resource "aws_instance" "instances" {
 
   key_name = "${aws_key_pair.keypair.key_name}"
 
-  vpc_security_group_ids = ["${aws_security_group.allow-ssh.id}"]
+  vpc_security_group_ids = [
+    "${aws_security_group.allow_ssh.id}",
+    "${aws_security_group.allow_outbound.id}",
+    "${aws_security_group.cluster_communication.id}",
+    "${aws_security_group.allow_portainer.id}",
+    "${aws_security_group.database.id}"
+  ]
 
   tags {
     Name = "luclima-instance"
   }
+}
+
+data "template_file" "hosts" {
+  template = "${file("./template/hosts.tpl")}"
+
+  vars {
+    PUBLIC_IP_0 = "${aws_instance.instances.*.public_ip[0]}"
+    PUBLIC_IP_1 = "${aws_instance.instances.*.public_ip[1]}"
+    PUBLIC_IP_2 = "${aws_instance.instances.*.public_ip[2]}"
+
+    PRIVATE_IP_0 = "${aws_instance.instances.*.private_ip[0]}"
+  }
+}
+
+resource "local_file" "hosts" {
+  content = "${data.template_file.hosts.rendered}"
+  filename = "./hosts"
 }
 
 output "public_ips" {
