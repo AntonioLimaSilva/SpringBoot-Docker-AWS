@@ -69,14 +69,41 @@ resource "aws_security_group" "cluster_communication" {
   }
 }
 
-resource "aws_security_group" "allow_portainer" {
+resource "aws_security_group" "allow_app" {
   vpc_id = "${aws_vpc.main.id}"
-  name = "luclima-allow-portainer"
+  name = "luclima-allow-app"
+
+  ingress {
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = ["${flatten(chunklist(aws_subnet.public_subnet.*.cidr_block, 1))}"]
+  }
 
   ingress {
     from_port = 9000
     to_port = 9000
     protocol = "tcp"
     cidr_blocks = ["${var.my_public_ip}"]
+  }
+
+}
+
+resource "aws_security_group" "allow_load_balancer" {
+  vpc_id = "${aws_vpc.main.id}"
+  name = "luclima-allow-load-balancer"
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = ["${flatten(chunklist(aws_subnet.public_subnet.*.cidr_block, 1))}"]
   }
 }
