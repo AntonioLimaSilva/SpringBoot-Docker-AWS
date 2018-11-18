@@ -1,5 +1,6 @@
 package br.com.luciano.beerstore.handler;
 
+import br.com.luciano.beerstore.service.exception.BeerNotExistException;
 import br.com.luciano.beerstore.service.exception.BusinessException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,13 @@ public class APIExceptionHandlerResponse {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, Locale locale) {
         final String errorCode = ex.getCode();
+
+        return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
+    }
+
+    @ExceptionHandler(BeerNotExistException.class)
+    public ResponseEntity<ErrorResponse> handleBeerNotExistException(BeerNotExistException ex, Locale locale) {
+        final String errorCode = "beer-id-not-exist";
 
         return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
     }
