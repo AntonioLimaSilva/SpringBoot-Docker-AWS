@@ -5,6 +5,8 @@ import br.com.luciano.beerstore.repository.BeerRepository;
 import br.com.luciano.beerstore.resource.util.LocationUtil;
 import br.com.luciano.beerstore.service.BeerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +31,8 @@ public class BeerResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<Beer>> findAll() {
-        return ResponseEntity.ok(this.beerRepository.findAll());
+    public ResponseEntity<Page<Beer>> search(Pageable pageable) {
+        return ResponseEntity.ok(this.beerRepository.findAll(pageable));
     }
 
 }
