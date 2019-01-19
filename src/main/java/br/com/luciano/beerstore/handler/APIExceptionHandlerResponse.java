@@ -1,7 +1,6 @@
 package br.com.luciano.beerstore.handler;
 
-import br.com.luciano.beerstore.service.exception.BeerNotExistException;
-import br.com.luciano.beerstore.service.exception.BusinessException;
+import br.com.luciano.beerstore.service.exception.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -49,8 +48,15 @@ public class APIExceptionHandlerResponse {
         return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale, ex.getValue())));
     }
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, Locale locale) {
+    @ExceptionHandler(CustomerAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerAlreadyExistException(CustomerAlreadyExistException ex, Locale locale) {
+        final String errorCode = ex.getCode();
+
+        return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
+    }
+
+    @ExceptionHandler(CustomerNotExistException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerNotExistException(CustomerNotExistException ex, Locale locale) {
         final String errorCode = ex.getCode();
 
         return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
@@ -58,7 +64,14 @@ public class APIExceptionHandlerResponse {
 
     @ExceptionHandler(BeerNotExistException.class)
     public ResponseEntity<ErrorResponse> handleBeerNotExistException(BeerNotExistException ex, Locale locale) {
-        final String errorCode = "beer-id-not-exist";
+        final String errorCode = ex.getCode();
+
+        return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
+    }
+
+    @ExceptionHandler(BeerAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BeerAlreadyExistException ex, Locale locale) {
+        final String errorCode = ex.getCode();
 
         return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
     }

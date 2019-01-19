@@ -35,7 +35,7 @@ public class BeerService {
         Optional<Beer> beerOptional = this.beerRepository.findById(id);
 
         if(!beerOptional.isPresent()) {
-            throw new BeerNotExistException("Não foi possível fazer a edição!");
+            throw new BeerNotExistException();
         }
 
         Beer beerSaved = beerOptional.get();

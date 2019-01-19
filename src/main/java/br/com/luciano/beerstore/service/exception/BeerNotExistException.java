@@ -1,7 +1,11 @@
 package br.com.luciano.beerstore.service.exception;
 
-public class BeerNotExistException extends RuntimeException {
-    public BeerNotExistException(String message) {
-        super(message);
+import org.springframework.http.HttpStatus;
+
+public class BeerNotExistException extends BusinessException {
+
+    public BeerNotExistException() {
+        super("beers-not-exist", HttpStatus.BAD_REQUEST);
     }
+
 }

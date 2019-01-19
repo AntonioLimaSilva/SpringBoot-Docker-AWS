@@ -6,10 +6,7 @@ import br.com.luciano.beerstore.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,6 +24,9 @@ public class CustomerController {
         return ResponseEntity.created(LocationUtil.of(customerSaved.getId())).body(customerSaved);
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> update(@PathVariable Integer id, @Valid @RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.update(id, customer));
+    }
 
 }
