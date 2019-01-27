@@ -30,14 +30,14 @@ public class BeerResource {
         return ResponseEntity.created(LocationUtil.of(beerSaved.getId())).body(beerSaved);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Beer> update(@PathVariable Integer id, @RequestBody Beer beer) {
+        return ResponseEntity.ok(this.beerService.merge(id, beer));
+    }
+
     @GetMapping
     public ResponseEntity<Page<Beer>> search(Pageable pageable) {
         return ResponseEntity.ok(this.beerRepository.findAll(pageable));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Beer> edit(@PathVariable Integer id, @RequestBody Beer beer) {
-        return ResponseEntity.ok(this.beerService.merge(id, beer));
     }
 
 }
