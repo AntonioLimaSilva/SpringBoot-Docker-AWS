@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,11 @@ public class BeerResource {
     @GetMapping
     public ResponseEntity<Page<Beer>> search(Pageable pageable) {
         return ResponseEntity.ok(this.beerRepository.findAll(pageable));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Beer> findById(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.beerRepository.findById(id).orElse(new Beer()));
     }
 
 }
