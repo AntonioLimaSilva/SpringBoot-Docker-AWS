@@ -27,8 +27,6 @@ public class AppUserDetailsService implements UserDetailsService {
 
         Set<SimpleGrantedAuthority> authorities = userRepository.findAllRoles(user).stream().map(r -> new SimpleGrantedAuthority(r.toUpperCase())).collect(Collectors.toSet());
 
-        authorities.forEach(r -> System.out.println(">>>>>>>>>>> Role: " + r.getAuthority()));
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+        return new UserSystem(user, authorities);
     }
 }
