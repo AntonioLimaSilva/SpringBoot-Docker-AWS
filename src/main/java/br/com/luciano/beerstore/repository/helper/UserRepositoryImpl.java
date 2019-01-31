@@ -13,7 +13,7 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
 
     @Override
     public List<String> findAllRoles(User user) {
-        String query = "select distinct r.name from User u inner join u.grups g inner join g.roles r where u = :user";
+        String query = "select distinct r.name from User u inner join u.groups g inner join g.roles r where u = :user";
         return this.manager.createQuery(query, String.class)
                 .setParameter("user", user)
                 .getResultList();
