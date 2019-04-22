@@ -1,9 +1,11 @@
 package br.com.luciano.beerstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
@@ -17,9 +19,11 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_seq")
     @EqualsAndHashCode.Include
     private Integer id;
+    @NotBlank(message = "group-1")
     private String name;
-    @ManyToMany
-    @JoinTable(name = "group_role", joinColumns = @JoinColumn(name = "group_id"),
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tb_group_role", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
