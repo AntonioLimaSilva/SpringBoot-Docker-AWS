@@ -79,7 +79,21 @@ public class APIExceptionHandlerResponse {
     }
 
     @ExceptionHandler(BeerAlreadyExistException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(BeerAlreadyExistException ex, Locale locale) {
+    public ResponseEntity<ErrorResponse> handleBeerAlreadyExistException(BeerAlreadyExistException ex, Locale locale) {
+        final String errorCode = ex.getCode();
+
+        return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
+    }
+
+    @ExceptionHandler(UserNotExistException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotExistException(UserNotExistException ex, Locale locale) {
+        final String errorCode = ex.getCode();
+
+        return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
+    }
+
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExistException(BeerAlreadyExistException ex, Locale locale) {
         final String errorCode = ex.getCode();
 
         return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, toError(errorCode, locale)));
