@@ -1,15 +1,15 @@
-package br.com.luciano.beerstore.security;
+package br.com.luciano.beerstore.security.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
-public class UserSystem extends User {
+public class UserPrincipal extends User {
 
     private br.com.luciano.beerstore.model.User user;
 
-    public UserSystem(br.com.luciano.beerstore.model.User user, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(br.com.luciano.beerstore.model.User user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getEmail(), user.getPassword(), authorities);
         this.user = user;
     }

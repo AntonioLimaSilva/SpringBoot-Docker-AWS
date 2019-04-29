@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,12 +32,13 @@ public class UserResource {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('WRITE_BEER')")
     public Page<User> findByName(@RequestParam(required = false, defaultValue = "%") String username, Pageable pageable) {
         return this.userRepository.findByUsernameContaining(username, pageable);
     }
 
     @GetMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ROLE_READ_USUARIO')")
+    @PreAuthorize("hasRole('WRITE_BEER')")
     public ResponseEntity<User> findById(@PathVariable Integer id) {
         Optional<User> userOptional = this.userRepository.findById(id);
 
@@ -44,14 +46,14 @@ public class UserResource {
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ROLE_UPDATE_USUARIO')")
+    @PreAuthorize("hasRole('EDIT_BEER')")
     public ResponseEntity<User> editar(@RequestBody @Valid User user, @PathVariable Integer id) {
         return ResponseEntity.ok(userService.update(user, id));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    //@PreAuthorize("hasAuthority('ROLE_DELETE_USUARIO')")
+    @PreAuthorize("hasRole('DELETE_BEER')")
     public void delete(@PathVariable Integer id) {
         this.userService.delete(id);
     }

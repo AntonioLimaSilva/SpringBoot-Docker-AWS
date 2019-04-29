@@ -34,7 +34,7 @@ public class User {
     @Valid
     @NotNull(message = "user-7")
     @Size(min = 1, message = "user-8")
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tb_user_group", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     protected List<Group> groups;
