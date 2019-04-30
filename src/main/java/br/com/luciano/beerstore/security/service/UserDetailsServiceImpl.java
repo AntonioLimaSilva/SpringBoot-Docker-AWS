@@ -1,4 +1,4 @@
-package br.com.luciano.beerstore.security;
+package br.com.luciano.beerstore.security.service;
 
 import br.com.luciano.beerstore.model.User;
 import br.com.luciano.beerstore.repository.UserRepository;
@@ -27,6 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Set<SimpleGrantedAuthority> authorities = userRepository.findAllRoles(user).stream().map(r -> new SimpleGrantedAuthority(r.toUpperCase())).collect(Collectors.toSet());
 
-        return new UserSystem(user, authorities);
+        return new UserPrincipal(user, authorities);
     }
 }
