@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,22 +27,26 @@ public class BeerResource {
     private final BeerRepository beerRepository;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADD_BEER')")
     public ResponseEntity<Beer> create(@RequestBody @Valid Beer beer) {
         Beer beerSaved = this.beerService.save(beer);
         return ResponseEntity.created(LocationUtil.of(beerSaved.getId())).body(beerSaved);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE_BEER')")
     public ResponseEntity<Beer> update(@PathVariable Integer id, @RequestBody Beer beer) {
         return ResponseEntity.ok(this.beerService.merge(id, beer));
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_READ_BEER')")
     public ResponseEntity<Page<Beer>> search(Pageable pageable) {
         return ResponseEntity.ok(this.beerRepository.findAll(pageable));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_READ_BEER')")
     public ResponseEntity<Beer> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(this.beerRepository.findById(id).orElse(new Beer()));
     }

@@ -25,7 +25,6 @@ public class AuthResource {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthorizationRequest authorizationRequest) {
-        System.out.println("AUT: " + authorizationRequest);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authorizationRequest.getEmail(),

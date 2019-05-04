@@ -1,11 +1,11 @@
 package br.com.luciano.beerstore.security.jwt;
 
+import br.com.luciano.beerstore.model.User;
 import br.com.luciano.beerstore.security.service.UserPrincipal;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -33,7 +33,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpiration * 1000))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpiration * 10000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
@@ -57,10 +57,9 @@ public class JwtProvider {
         return false;
     }
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser()
+    public String getEmailFromJwtToken(String token) {
+        return  Jwts.parser()
                 .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody().getSubject();
+                .parseClaimsJws(token).getBody().get("email", String.class);
     }
 }

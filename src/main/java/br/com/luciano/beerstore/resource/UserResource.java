@@ -26,19 +26,20 @@ public class UserResource {
     private UserService userService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADD_USER')")
     public ResponseEntity<User> create(@RequestBody @Valid User user) {
         User userSaved = this.userService.save(user);
         return ResponseEntity.created(LocationUtil.of(userSaved.getId())).body(userSaved);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('WRITE_BEER')")
+    @PreAuthorize("hasAuthority('ROLE_READ_USER')")
     public Page<User> findByName(@RequestParam(required = false, defaultValue = "%") String username, Pageable pageable) {
         return this.userRepository.findByUsernameContaining(username, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('WRITE_BEER')")
+    @PreAuthorize("hasAuthority('ROLE_READ_USER')")
     public ResponseEntity<User> findById(@PathVariable Integer id) {
         Optional<User> userOptional = this.userRepository.findById(id);
 
@@ -46,14 +47,14 @@ public class UserResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('EDIT_BEER')")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE_USER')")
     public ResponseEntity<User> editar(@RequestBody @Valid User user, @PathVariable Integer id) {
         return ResponseEntity.ok(userService.update(user, id));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('DELETE_BEER')")
+    @PreAuthorize("hasAuthority('ROLE_DELETE_USER')")
     public void delete(@PathVariable Integer id) {
         this.userService.delete(id);
     }
