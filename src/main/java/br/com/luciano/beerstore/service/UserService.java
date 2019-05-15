@@ -21,9 +21,9 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User save(User user) {
-        Optional<User> usuarioOptional = this.userRepository.findByEmailIgnoreCase(user.getEmail());
+        Optional<User> userOptional = this.userRepository.findByEmailIgnoreCase(user.getEmail());
 
-        if(usuarioOptional.isPresent() && !usuarioOptional.get().equals(user)) {
+        if(userOptional.isPresent()) {
             throw new UserAlreadyExistException();
         }
 
@@ -49,10 +49,14 @@ public class UserService {
             throw new UserNotExistException();
         }
 
+        if(!userOptional.get().getPassword().equals(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         User userSaved = userOptional.get();
 
         BeanUtils.copyProperties(user, userSaved, "id");
 
-        return save(userSaved);
+        return userRepository.save(userSaved);
     }
 }
