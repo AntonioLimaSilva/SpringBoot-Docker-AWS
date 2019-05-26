@@ -1,6 +1,7 @@
 package br.com.luciano.beerstore.resource;
 
 import br.com.luciano.beerstore.model.Beer;
+import br.com.luciano.beerstore.model.BeerType;
 import br.com.luciano.beerstore.repository.BeerRepository;
 import br.com.luciano.beerstore.resource.util.LocationUtil;
 import br.com.luciano.beerstore.service.BeerService;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.xml.ws.Response;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/beers")
